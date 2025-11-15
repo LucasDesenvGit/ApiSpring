@@ -2,6 +2,7 @@ package lucas.spring.api.config;
 
 import lucas.spring.api.entities.User;
 import lucas.spring.api.repositories.UserRepository;
+import lucas.spring.api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,9 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public void run(String... args) throws Exception {
