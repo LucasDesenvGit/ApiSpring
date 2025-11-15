@@ -17,5 +17,5 @@ public class UserResource {
                     new User(1, "Maria", "maria@gmail.com", "9999999", "1235")
                 );
     }
-    
+
 }
