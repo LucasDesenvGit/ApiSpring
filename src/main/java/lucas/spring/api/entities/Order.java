@@ -1,11 +1,12 @@
 package lucas.spring.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lucas.spring.api.entities.enums.OrderStatus;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_order")
@@ -21,6 +22,12 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
+
+    @OneToMany(mappedBy = "order")
+    private Set<OrderItem> orderItems = new HashSet<>();
 
     public Order() {
     }
@@ -66,6 +73,18 @@ public class Order implements Serializable {
         this.client = client;
     }
 
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -76,5 +95,12 @@ public class Order implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public Double getTotal() {
+        return getOrderItems()
+                .stream()
+                .map(OrderItem::getsubtotal)
+                .reduce(0.0, Double::sum);
     }
 }

@@ -13,8 +13,11 @@ import java.util.Optional;
 @Service
 public class OrderService {
 
-    @Autowired
     private OrderRepository repository;
+
+    public OrderService(OrderRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Order> findAll() {
         return repository.findAll();
@@ -24,5 +27,23 @@ public class OrderService {
         Optional<Order> order = repository.findById(id);
 
         return order.get();
+    }
+
+    public Long persist(Order order) {
+        return repository.save(order).getId();
+    }
+
+    public Long update(Order order) {
+        Order orderBd = findById(order.getId());
+
+        orderBd.setStatus(order.getStatus());
+        orderBd.setMoment(order.getMoment());
+        orderBd.setClient(order.getClient());
+
+        return repository.save(orderBd).getId();
+    }
+
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 }
